@@ -8,21 +8,21 @@
 blue variables: parameters required for `model.predict()`
 </font>
 
-###<font color="blue">1. images</font>
+### <font color="blue">1. images</font>
 
-- ####attributes 
+- #### attributes 
 
 shape = (1, 3, 640, 640)
 
 pixel\_range = [0, 255] - config.MEAN\_PIXEL
 
-- ####original image size: 
+- #### original image size: 
 
 968 (height) * 1296 (width)
 
-- ####operations:
+- #### operations:
  
-#####1. datasets/scannet\_scene.py-`class ScanNetScene()-def __getitem__()`:
+##### 1. datasets/scannet\_scene.py-`class ScanNetScene()-def __getitem__()`:
 
 	image = cv2.imread(imagePath) 
 shape = (968, 1296, 3)
@@ -35,7 +35,7 @@ channel = (b, g, r)
 shape = (480, 640, 3)
 
 
-#####2. datasets/plane\_stereo\_dataset.py-`class PlaneDataset(PlaneDatasetSingle)-def __getitem__()`:
+##### 2. datasets/plane\_stereo\_dataset.py-`class PlaneDataset(PlaneDatasetSingle)-def __getitem__()`:
 
 	image_1, planes_1, plane_info_1, segmentation_1, depth_1, camera_1, extrinsics_1, semantics_1 = scene[imageIndex]
 
@@ -74,9 +74,9 @@ pixel\_range = [0, 255] - config.MEAN\_PIXEL
 
 shape = (3, 640, 640) 
 
-###<font color="blue">2. image_metas</font>
+### <font color="blue">2. image_metas</font>
 
-- ####attributes
+- #### attributes
 
 shape = (1, 16)
 
@@ -87,7 +87,7 @@ shape = (1, 16)
 image\_metas[0]: image\_id 
 
 <font color='gray'>
-*image\_id = 10000 \* scene\_id + image\_num, e.g. 226078 indicates scene\_id = 22, image\_num = 6078. Scene_id has the same order as the corresponding scannetv1[.txt file](https://github.com/ScanNet/ScanNet/tree/master/Tasks/Benchmark "ScanNet/Tasks/Benchmark/") (index starts from 0). E.g., scene_id = 22 for a training image means the image is from the scene in the 23rd line of scannetv1\_train.txt*
+*image\_id = 10000 \* scene\_id + image\_num, e.g. 226078 indicates scene\_id = 22, image\_num = 6078. Scene_id has the same order as the corresponding scannetv1 [.txt file](https://github.com/ScanNet/ScanNet/tree/master/Tasks/Benchmark "ScanNet/Tasks/Benchmark/") (index starts from 0). E.g., scene_id = 22 for a training image means the image is from the scene in the 23rd line of scannetv1\_train.txt*
 </font> 
 
 image\_metas[1:4]: [height, width, channels] befor `resize_image()`
@@ -100,9 +100,9 @@ image\_metas[4:8]: (y1, x1, y2, x2) in pixels. The area of the image where the r
 
 len(image\_metas[8:]): #classes = 8
 
-- ####operations:
+- #### operations:
 
-#####1. datasets/plane\_stereo\_dataset.py-`class PlaneDataset(PlaneDatasetSingle)-def __getitem__()`:
+##### 1. datasets/plane\_stereo\_dataset.py-`class PlaneDataset(PlaneDatasetSingle)-def __getitem__()`:
 
 	image, image_metas, gt_class_ids, gt_boxes, gt_masks, gt_parameters = load_image_gt(self.config, index, image, depth, mask, class_ids, parameters, augment=self.split == 'train')
             
@@ -110,17 +110,17 @@ As has been explained in *attributes*.
 
 	image_metas = torch.from_numpy(image_metas)
 
-###3. rpn\_match
+### 3. rpn\_match
 
-- ####attributes
+- #### attributes
 
 shape = (1, 1023001, 1)
 
 range = {-1, 0, 1}
 
-- ####operations:
+- #### operations:
 
-#####1. datasets/plane\_stereo\_dataset.py-`class PlaneDataset(PlaneDatasetSingle)-def __getitem__()`:
+##### 1. datasets/plane\_stereo\_dataset.py-`class PlaneDataset(PlaneDatasetSingle)-def __getitem__()`:
 
 TODO: edit after 5. - 6. 
 
@@ -130,12 +130,12 @@ TODO: edit after 5. - 6.
 
 	rpn_match = torch.from_numpy(rpn_match)
 
-###4. rpn\_bbox
+### 4. rpn\_bbox
 
 
-###<font color="blue">5. gt\_class\_ids</font>
+### <font color="blue">5. gt\_class\_ids</font>
 
-- ####attributes
+- #### attributes
 
 shape = (1, #planes)
 
@@ -147,9 +147,9 @@ acquired by KNN (as described in *3.1-plane normal estimation* in the paper)
 *looks like [2 3 3 2 5 2 1 1 4 6 1 2 3 3 3 4 7]*
 </font> 
 
-- ####operations:
+- #### operations:
 
-#####1. datasets/scannet\_scene.py-`class ScanNetScene()-def __getitem__()`:
+##### 1. datasets/scannet\_scene.py-`class ScanNetScene()-def __getitem__()`:
 
 	self.planes = np.load(scenePath + '/annotation/planes.npy')
 
@@ -208,7 +208,7 @@ transformation process
 </font>
 </center>
 
-#####2. datasets/plane\_stereo\_dataset.py-`class PlaneDataset(PlaneDatasetSingle)-def __getitem__()`:
+##### 2. datasets/plane\_stereo\_dataset.py-`class PlaneDataset(PlaneDatasetSingle)-def __getitem__()`:
 	plane_offsets = np.linalg.norm(planes, axis=-1)   
                 
 
@@ -240,9 +240,9 @@ the nearest anchor
 
 	class_ids = np.array(class_ids, dtype=np.int32)
 
-###<font color="blue">6. gt\_boxes</font>
+### <font color="blue">6. gt\_boxes</font>
 
-- ####attributes
+- #### attributes
 
 shape = (1, #planes, 4)
 
@@ -254,7 +254,7 @@ ground truth boxes
 </font>
 </center>
 
-#####1. datasets/scannet\_scene.py-`class ScanNetScene()-def __getitem__()`:
+##### 1. datasets/scannet\_scene.py-`class ScanNetScene()-def __getitem__()`:
 
 	segmentation = cv2.imread(segmentationPath, -1).astype(np.int32)
 
@@ -275,7 +275,7 @@ non-planar pixels are denoted as -1
 	segmentation, plane_depths = cleanSegmentation(image, planes, plane_info, segmentation, depth, self.camera, planeAreaThreshold=self.options.planeAreaThreshold, planeWidthThreshold=self.options.planeWidthThreshold, confident_labels=self.confident_labels, return_plane_depths=True)
 
 
-#####2. datasets/plane\_stereo\_dataset.py-`class PlaneDataset(PlaneDatasetSingle)-def __getitem__()`:
+##### 2. datasets/plane\_stereo\_dataset.py-`class PlaneDataset(PlaneDatasetSingle)-def __getitem__()`:
 
 	m = segmentation == planeIndex
 
@@ -293,53 +293,35 @@ shape = (480, 640, #planes)
 
 draw the bounding box according to a segmentation
 
-###<font color="blue">7. gt\_masks</font>
-###<font color="blue">8. gt\_parameters</font>
-###9. gt_depth
-###10.	extrinsics
-###11.	gt\_plane
-###12.	gt\_segmentation
-###13.	plane\_indices
-###14.	camera
+### <font color="blue">7. gt\_masks</font>
+### <font color="blue">8. gt\_parameters</font>
+### 9. gt_depth
+### 10.	extrinsics
+### 11.	gt\_plane
+### 12.	gt\_segmentation
+### 13.	plane\_indices
+### 14.	camera
 
 
 
 
 ## Y (Output)
-###1. rpn\_class\_logits
-###2. rpn\_pred\_bbox
-###3. target\_class\_ids
-###4. mrcnn\_class\_logits
-###5. target\_deltas
-###6. mrcnn\_bbox
-###7. target\_mask
-###8. mrcnn\_mask
-###9. target\_parameters
-###10.	mrcnn\_parameters
-###11.	detections
-###12.	detection\_masks
-###13.	detection\_gt\_parameters
-###14.	detection\_gt\_masks
-###15.	rpn\_rois
-###16.	roi\_features
-###17.	roi\_indices
-###18.	feature\_map
-###19.	depth\_np\_pred
-
----
-
-#####1. datasets/scannet_scene.py-`class ScanNetScene()-def __getitem__()`:
-
-	self.planes = np.load(scenePath + '/annotation/planes.npy')
-
-shape = (xxx, 3), *e.g.* (338, 3)
-
-	newPlanes.append(self.planes[oriIndex])
-
-shape = (xxx, 3)
-
-select appropriate ones from `planes` according to `segmentation`
-
-	planes = np.array(newPlanes)
-
-	planes = self.transformPlanes(extrinsics, planes)
+### 1. rpn\_class\_logits
+### 2. rpn\_pred\_bbox
+### 3. target\_class\_ids
+### 4. mrcnn\_class\_logits
+### 5. target\_deltas
+### 6. mrcnn\_bbox
+### 7. target\_mask
+### 8. mrcnn\_mask
+### 9. target\_parameters
+### 10.	mrcnn\_parameters
+### 11.	detections
+### 12.	detection\_masks
+### 13.	detection\_gt\_parameters
+### 14.	detection\_gt\_masks
+### 15.	rpn\_rois
+### 16.	roi\_features
+### 17.	roi\_indices
+### 18.	feature\_map
+### 19.	depth\_np\_pred
