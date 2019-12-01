@@ -163,8 +163,11 @@ select appropriate ones from `planes` according to `segmentation`
 `extrinsics_inv` is the 4 * 4 camera extrinsic matrix read from `scenexxxx_xx/pose/xx.txt`, it looks like
 
 `-0.955421 0.119616 -0.269932 2.655830`
+
 `0.295248 0.388339 -0.872939 2.981598`
+
 `0.000408 -0.913720 -0.406343 1.368648`
+
 `0.000000 0.000000 0.000000 1.000000`
 
 To learn more about camera matrix, please refer to [this article](https://blog.csdn.net/zb1165048017/article/details/71104241) (Chinese). Here is a brief introduction to the extrinsic matrix. 
@@ -172,7 +175,9 @@ To learn more about camera matrix, please refer to [this article](https://blog.c
 The top left 3 * 3 square matrix is a normalized orthogonal matrix and it represents a rotation matrix.
 
 `-0.955421 0.119616 -0.269932`
+
 `0.295248 0.388339 -0.872939`
+
 `0.000408 -0.913720 -0.406343`
 
 
@@ -180,7 +185,9 @@ The top left 3 * 3 square matrix is a normalized orthogonal matrix and it repres
 The top right 3 * 1 vector represents translation parameters.
 
 `2.655830`
+
 `2.981598`
+
 `1.368648`
 
 
