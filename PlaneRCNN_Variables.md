@@ -4,10 +4,6 @@
 
 ## X (Input)
 
-<font color="blue" size=4>
-blue variables: parameters required for `model.predict()`
-</font>
-
 ### <font color="blue">1. images</font>
 
 - #### attributes 
@@ -55,12 +51,10 @@ shape = (640, 640, 3)
 
 Top 80 and bottom 80 lines of pixels are 0 padded.
 
-<center>![padded image](padded_image.jpg "padded image")</center>
-<center>
-<font face="Times New Roman" size=3>
+![padded image](padded_image.jpg)
+
 padded image (bgr)
-</font>
-</center>
+
 
 
 	image = utils.mold_image(image.astype(np.float32), self.config)
@@ -74,29 +68,28 @@ pixel\_range = [0, 255] - config.MEAN\_PIXEL
 
 shape = (3, 640, 640) 
 
-### <font color="blue">2. image_metas</font>
+### 2. image_metas
 
 - #### attributes
 
 shape = (1, 16)
 
-<font color='gray'>
+
 *looks like [226078    480    640      3     80      0    560    640      1      1 1 1 1 1 1 1]*
-</font> 
+
 
 image\_metas[0]: image\_id 
 
-<font color='gray'>
+
 *image\_id = 10000 \* scene\_id + image\_num, e.g. 226078 indicates scene\_id = 22, image\_num = 6078. Scene_id has the same order as the corresponding scannetv1 [.txt file](https://github.com/ScanNet/ScanNet/tree/master/Tasks/Benchmark "ScanNet/Tasks/Benchmark/") (index starts from 0). E.g., scene_id = 22 for a training image means the image is from the scene in the 23rd line of scannetv1\_train.txt*
-</font> 
 
 image\_metas[1:4]: [height, width, channels] befor `resize_image()`
 
 image\_metas[4:8]: (y1, x1, y2, x2) in pixels. The area of the image where the real image is (excluding the padding)
 
-<font color='gray'>
+
 *[80      0    560    640] indicates the left top point of the real image excluding padding is `image[80, 0]`, and the right bottom point `image[560, 640]`*
-</font> 
+
 
 len(image\_metas[8:]): #classes = 8
 
@@ -133,7 +126,7 @@ TODO: edit after 5. - 6.
 ### 4. rpn\_bbox
 
 
-### <font color="blue">5. gt\_class\_ids</font>
+### 5. gt\_class\_ids
 
 - #### attributes
 
@@ -143,9 +136,9 @@ range = [1, 7]
 
 acquired by KNN (as described in *3.1-plane normal estimation* in the paper)
 
-<font color='gray'>
+
 *looks like [2 3 3 2 5 2 1 1 4 6 1 2 3 3 3 4 7]*
-</font> 
+
 
 - #### operations:
 
@@ -174,7 +167,7 @@ select appropriate ones from `planes` according to `segmentation`
 `0.000408 -0.913720 -0.406343 1.368648`
 `0.000000 0.000000 0.000000 1.000000`
 
-To learn more about camera matrix, please refer to [this article](https://blog.csdn.net/zb1165048017/article/details/71104241 "camera matrix") (Chinese). Here is a brief introduction to the extrinsic matrix. 
+To learn more about camera matrix, please refer to [this article](https://blog.csdn.net/zb1165048017/article/details/71104241) (Chinese). Here is a brief introduction to the extrinsic matrix. 
 
 The top left 3 * 3 square matrix is a normalized orthogonal matrix and it represents a rotation matrix.
 
@@ -199,14 +192,12 @@ The top right 3 * 1 vector represents translation parameters.
 Convert the vectors in the real-world coordinate into the camera coordinate.
 
 
-<center>![transformation](transformation.jpg "transformation")</center>
-<center>
-<font face="Times New Roman" size=3>
+![transformation](transformation.jpg)
+
 transformation process
 
 *Projection*, the output vector, is the projection of *affine* on *rotation*. *Affine* is the result of the affine transformation (rotation + translation); *rotation* is the result of the rotation transformation.  
-</font>
-</center>
+
 
 ##### 2. datasets/plane\_stereo\_dataset.py-`class PlaneDataset(PlaneDatasetSingle)-def __getitem__()`:
 	plane_offsets = np.linalg.norm(planes, axis=-1)   
@@ -222,13 +213,10 @@ self.config.ANCHOR_NORMALS.shape = (7, 3)
 
 distance_N.shape = (#planes, 7)
 
-<center>![anchor normals](anchor_normals.jpg "anchor normals")</center>
+![anchor normals](anchor_normals.jpg)
 
-<center>
-<font face="Times New Roman" size=3>
 anchor normals
-</font>
-</center>
+
 	
 	normal_anchors = distances_N.argmin(-1)
 
@@ -240,19 +228,17 @@ the nearest anchor
 
 	class_ids = np.array(class_ids, dtype=np.int32)
 
-### <font color="blue">6. gt\_boxes</font>
+### 6. gt\_boxes
 
 - #### attributes
 
 shape = (1, #planes, 4)
 
-<center>![ground truth boxes](gt_boxes.jpg "ground truth boxes")</center>
+![ground truth boxes](gt_boxes.jpg)
 
-<center>
-<font face="Times New Roman" size=3>
+
 ground truth boxes
-</font>
-</center>
+
 
 ##### 1. datasets/scannet\_scene.py-`class ScanNetScene()-def __getitem__()`:
 
